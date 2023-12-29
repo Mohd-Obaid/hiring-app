@@ -6,7 +6,7 @@ pipeline {
         DOCKER_HUB_USERNAME = "mobaid15"
         DOCKER_HUB_PASSWORD = "Anon9542@"
         GITHUB_USERNAME_CREDENTIAL = credentials('GITHUB_USERNAME')
-        GITHUB_ACCESS_TOKEN_CREDENTIAL = credentials('GITHUB_ACCESS_TOKEN')
+        GITHUB_ACCESS_TOKEN_CREDENTIAL = credentials('GITHUB_PASSWD')
     }
 
     stages {
@@ -39,7 +39,7 @@ pipeline {
                     git add .
                     git commit -m 'Updated the deploy yaml | Jenkins Pipeline'
                     git remote -v
-                    git push https://Mohd-Obaid:Anon9542@github.com/Mohd-Obaid/Hiring-app-argocd.git main
+                    git push https://${GITHUB_USERNAME}:${GITHUB_PASSWD}@github.com/Mohd-Obaid/Hiring-app-argocd.git main
                     '''
                 }
             }
