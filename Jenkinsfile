@@ -21,10 +21,14 @@ pipeline {
                 sh "docker push mobaid15/hiring-app:${BUILD_NUMBER}"
             }
         }
-
-        stage('Update K8S manifest & push to Repo') {
+        stage('Checkout K8S manifest SCM'){
             steps {
-                script {
+              git branch: 'main', url: 'https://github.com/betawins/Hiring-app-argocd.git'
+            }
+        } 
+        stage('Update K8S manifest & push to Repo'){
+            steps {
+                script{
                     withCredentials([usernamePassword(credentialsId: 'Github_server', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh '''
                         cat /var/lib/jenkins/workspace/$JOB_NAME/dev/deployment.yaml
