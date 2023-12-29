@@ -5,8 +5,8 @@ pipeline {
         IMAGE_TAG = "${BUILD_NUMBER}"
         DOCKER_HUB_USERNAME = "mobaid15"
         DOCKER_HUB_PASSWORD = "Anon9542@"
-        GITHUB_USERNAME = "your_github_username"
-        GITHUB_PASSWORD = "your_github_password"
+        GITHUB_USERNAME = "mohdobaid0444@outlook.com"
+        GITHUB_PASSWORD = "Anon9542@"
     }
 
     stages {
