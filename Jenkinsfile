@@ -26,22 +26,23 @@ pipeline {
               git branch: 'main', url: 'https://github.com/Mohd-Obaid/Hiring-app-argocd.git'
             }
         } 
-        stage('Update K8S manifest & push to Repo'){
-            steps {
-                script{
-                    withCredentials([usernamePassword(credentialsId: 'Github_server', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        sh '''
-                        cat /var/lib/jenkins/workspace/$JOB_NAME/dev/deployment.yaml
-                        sed -i "s/17/${BUILD_NUMBER}/g" /var/lib/jenkins/workspace/$JOB_NAME/dev/deployment.yaml
-                        cat /var/lib/jenkins/workspace/$JOB_NAME/dev/deployment.yaml
-                        git add .
-                        git commit -m 'Updated the deploy yaml | Jenkins Pipeline'
-                        git remote -v
-                        git push https://${USERNAME}:${PASSWORD}@github.com/Mohd-Obaid/Hiring-app-argocd.git main
-                        '''
-                    }
-                }
+stage('Update K8S manifest & push to Repo') {
+    steps {
+        script {
+            withCredentials([string(credentialsId: 'Github_server1', variable: 'GITHUB_TOKEN')]) {
+                sh '''
+                    git remote -v
+                    git remote set-url origin https://${GITHUB_TOKEN}@github.com/Mohd-Obaid/Hiring-app-argocd.git
+                    cat /var/lib/jenkins/workspace/$JOB_NAME/dev/deployment.yaml
+                    sed -i "s/17/${BUILD_NUMBER}/g" /var/lib/jenkins/workspace/$JOB_NAME/dev/deployment.yaml
+                    cat /var/lib/jenkins/workspace/$JOB_NAME/dev/deployment.yaml
+                    git add .
+                    git commit -m 'Updated the deploy yaml | Jenkins Pipeline'
+                    git push origin main
+                '''
             }
         }
+    }
+}
     }
 }
