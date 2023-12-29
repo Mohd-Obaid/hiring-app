@@ -31,7 +31,7 @@ pipeline {
         stage('Update K8S manifest & push to Repo') {
             steps {
                 script {
-                    withCredentials([string(credentialsId: 'GitHub_PAT', variable: 'GITHUB_PAT')]) {
+                    withCredentials([string(credentialsId: 'GitHub_TOKEN', variable: 'GitHub_TOKEN')]) {
                         sh '''
                         cat /var/lib/jenkins/workspace/$JOB_NAME/dev/deployment.yaml
                         sed -i "s/17/${BUILD_NUMBER}/g" /var/lib/jenkins/workspace/$JOB_NAME/dev/deployment.yaml
