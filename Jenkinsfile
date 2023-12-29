@@ -5,7 +5,7 @@ pipeline {
         IMAGE_TAG = "${BUILD_NUMBER}"
         DOCKER_HUB_USERNAME = "mobaid15"
         DOCKER_HUB_PASSWORD = "Anon9542@"
-        GITHUB_USERNAME = "mohdobaid0444@outlook.com"
+        GITHUB_USERNAME_CREDENTIAL = credentials('GITHUB_USERNAME')
         GITHUB_ACCESS_TOKEN_CREDENTIAL = credentials('GITHUB_ACCESS_TOKEN')
     }
 
@@ -25,7 +25,7 @@ pipeline {
 
         stage('Checkout K8S manifest SCM') {
             steps {
-                git branch: 'main', url: 'https://github.com/Mohd-Obaid/Hiring-app-argocd.git'
+                git branch: 'main', url: 'https://github.com/Mohd-Obaid/Hiring-app-argocd.git', credentialsId: 'GITHUB_USERNAME'
             }
         }
 
@@ -39,7 +39,7 @@ pipeline {
                     git add .
                     git commit -m 'Updated the deploy yaml | Jenkins Pipeline'
                     git remote -v
-                    git push https://${GITHUB_USERNAME}:${GITHUB_ACCESS_TOKEN_CREDENTIAL}@github.com/Mohd-Obaid/Hiring-app-argocd.git main
+                    git push https://${GITHUB_USERNAME_CREDENTIAL}:${GITHUB_ACCESS_TOKEN_CREDENTIAL}@github.com/Mohd-Obaid/Hiring-app-argocd.git main
                     '''
                 }
             }
