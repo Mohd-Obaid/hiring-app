@@ -5,7 +5,7 @@ pipeline {
         IMAGE_TAG = "${BUILD_NUMBER}"
         DOCKER_HUB_USERNAME = "mobaid15"
         DOCKER_HUB_PASSWORD = "Anon9542@"
-        GITHUB_CREDENTIALS = credentials('Github_server')
+        GITHUB_PAT_CREDENTIAL = credentials('GitHub_TOKEN') 
     }
 
     stages {
@@ -21,15 +21,17 @@ pipeline {
                 sh "docker push mobaid15/hiring-app:${BUILD_NUMBER}"
             }
         }
-        stage('Checkout K8S manifest SCM'){
+
+        stage('Checkout K8S manifest SCM') {
             steps {
-              git branch: 'main', url: 'https://github.com/Mohd-Obaid/Hiring-app-argocd.git'
+                git branch: 'main', url: 'https://github.com/Mohd-Obaid/Hiring-app-argocd.git', credentialsId: 'GitHub_PAT'
             }
-        } 
-        stage('Update K8S manifest & push to Repo'){
+        }
+
+        stage('Update K8S manifest & push to Repo') {
             steps {
-                script{
-                    withCredentials([usernamePassword(credentialsId: 'Github_server', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                script {
+                    withCredentials([string(credentialsId: 'GitHub_PAT', variable: 'GITHUB_PAT')]) {
                         sh '''
                         cat /var/lib/jenkins/workspace/$JOB_NAME/dev/deployment.yaml
                         sed -i "s/17/${BUILD_NUMBER}/g" /var/lib/jenkins/workspace/$JOB_NAME/dev/deployment.yaml
@@ -37,7 +39,7 @@ pipeline {
                         git add .
                         git commit -m 'Updated the deploy yaml | Jenkins Pipeline'
                         git remote -v
-                        git push https://${USERNAME}:${PASSWORD}@github.com/Mohd-Obaid/Hiring-app-argocd.git main
+                        git push https://${GitHub_TOKEN}@github.com/Mohd-Obaid/Hiring-app-argocd.git main
                         '''
                     }
                 }
